@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -38,6 +39,22 @@ class User implements UserInterface
      */
     private $apiToken;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Asset", mappedBy="user")
+     */
+    private $assets;
+
+    /**
+     * User constructor.
+     */
+    public function __construct()
+    {
+        $this->assets = new ArrayCollection();
+    }
+
+    /**
+     * @return int|null
+     */
     public function getId(): ?int
     {
         return $this->id;
@@ -53,6 +70,10 @@ class User implements UserInterface
         return (string) $this->username;
     }
 
+    /**
+     * @param string $username
+     * @return $this
+     */
     public function setUsername(string $username): self
     {
         $this->username = $username;
@@ -125,6 +146,36 @@ class User implements UserInterface
     public function setApiToken($apiToken): void
     {
         $this->apiToken = $apiToken;
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getAssets(): ArrayCollection
+    {
+        return $this->assets;
+    }
+
+    /**
+     * @param Asset $asset
+     * @return $this
+     */
+    public function addAsset(Asset $asset): self
+    {
+        $this->assets->add($asset);
+
+        return $this;
+    }
+
+    /**
+     * @param Asset $asset
+     * @return $this
+     */
+    public function removeAsset(Asset $asset): self
+    {
+        $this->assets->remove($asset);
+
+        return $this;
     }
 
 
