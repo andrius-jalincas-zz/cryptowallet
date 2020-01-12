@@ -149,9 +149,9 @@ class User implements UserInterface
     }
 
     /**
-     * @return ArrayCollection
+     * @return Mixed
      */
-    public function getAssets(): ArrayCollection
+    public function getAssets()
     {
         return $this->assets;
     }
