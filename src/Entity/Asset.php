@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\AssetRepository")
@@ -18,11 +19,13 @@ class Asset
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank()
      */
     private $label;
 
     /**
      * @ORM\Column(type="float")
+     * @Assert\Positive()
      */
     private $amount;
 
@@ -45,6 +48,7 @@ class Asset
     /**
      * @ORM\OneToOne(targetEntity="Currency")
      * @ORM\JoinColumn(name="currency_id", referencedColumnName="id")
+     * @Assert\NotNull()
      */
     private $currency;
 

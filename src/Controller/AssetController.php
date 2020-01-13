@@ -4,7 +4,8 @@ namespace App\Controller;
 
 use App\Entity\Asset;
 use App\Entity\User;
-use Doctrine\ORM\EntityManagerInterface;
+use App\Service\Asset as AssetService;
+use Symfony\Component\HttpFoundation\Request;
 use  Symfony\Component\HttpFoundation\Response;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -19,9 +20,9 @@ use Symfony\Component\Routing\Annotation\Route;
 class AssetController extends AbstractController
 {
     /**
-     * @Route("/", name="asset", methods={"GET"})
+     * @Route("/", name="asset.list", methods={"GET"})
      */
-    public function index()
+    public function list()
     {
         /** @var User $user */
         $user = $this->getUser();
@@ -43,5 +44,78 @@ class AssetController extends AbstractController
         }
 
         return $this->json($response);
+    }
+
+    /**
+     * @Route("", name="asset.add", methods={"POST"})
+     */
+    public function add(Request $request, AssetService $assetService)
+    {
+        $requestData = json_decode($request->getContent(), true);
+
+        if (empty($requestData)) {
+
+            return $this->json([
+                "error" => "Request data is invalid"
+            ], Response::HTTP_BAD_REQUEST);
+        }
+
+        /** @var User $user */
+        $user = $this->getUser();
+        try {
+            $assetService->handleAssetData($requestData, $user);
+        } catch (\InvalidArgumentException $exception) {
+            return $this->json([
+                'error' => $exception->getMessage()
+            ], $exception->getCode());
+        }
+
+        return $this->json(null);
+    }
+
+    /**
+     * @Route("/{id}", name="asset.update", methods={"PUT"})
+     */
+    public function update(Request $request, int $id, AssetService $assetService)
+    {
+        $requestData = json_decode($request->getContent(), true);
+
+        if (empty($requestData)) {
+
+            return $this->json([
+                "error" => "Request data is invalid"
+            ], Response::HTTP_BAD_REQUEST);
+        }
+
+        /** @var User $user */
+        $user = $this->getUser();
+        try {
+            $assetService->handleAssetData($requestData, $user, $id);
+        } catch (\InvalidArgumentException $exception) {
+            return $this->json([
+                'error' => $exception->getMessage()
+            ], $exception->getCode());
+        }
+
+        return $this->json(null);
+    }
+
+    /**
+     * @Route("/{id}", name="asset.remove", methods={"DELETE"})
+     */
+    public function remove(Request $request, int $id, AssetService $assetService)
+    {
+        /** @var User $user */
+        $user = $this->getUser();
+
+        try {
+            $assetService->deleteByIdAndUserId($id, $user->getId());
+        } catch (\InvalidArgumentException $exception) {
+            return $this->json([
+                'error' => $exception->getMessage()
+            ], $exception->getCode());
+        }
+
+        return $this->json(null);
     }
 }

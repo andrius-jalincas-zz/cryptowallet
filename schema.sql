@@ -31,7 +31,8 @@ CREATE TABLE `asset` (
 CREATE TABLE `currency` (
  `id` int(11) NOT NULL AUTO_INCREMENT,
  `name` varchar(255) NOT NULL,
- `slug` varchar(255) NOT NULL,
+ `slug` varchar(10) NOT NULL,
  `converter` varchar(255) NOT NULL DEFAULT "default",
- PRIMARY KEY (`id`)
+ PRIMARY KEY (`id`),
+ INDEX (`slug`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
