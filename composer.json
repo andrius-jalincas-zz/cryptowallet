@@ -16,7 +16,8 @@
         "symfony/orm-pack": "^1.0",
         "symfony/security-bundle": "5.0.*",
         "symfony/validator": "5.0.*",
-        "symfony/yaml": "5.0.*"
+        "symfony/yaml": "5.0.*",
+        "zircote/swagger-php": "^3.0"
     },
     "require-dev": {
         "symfony/maker-bundle": "^1.14"
