@@ -7,6 +7,7 @@
         "ext-iconv": "*",
         "ext-json": "^1.7",
         "doctrine/annotations": "^1.8",
+        "phpunit/phpunit": "^8.5",
         "symfony/cache": "5.0.*",
         "symfony/console": "5.0.*",
         "symfony/dotenv": "5.0.*",
@@ -15,6 +16,7 @@
         "symfony/http-client": "5.0.*",
         "symfony/orm-pack": "^1.0",
         "symfony/security-bundle": "5.0.*",
+        "symfony/test-pack": "^1.0",
         "symfony/validator": "5.0.*",
         "symfony/yaml": "5.0.*",
         "zircote/swagger-php": "^3.0"

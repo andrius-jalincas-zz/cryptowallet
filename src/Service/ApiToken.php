@@ -50,7 +50,7 @@ class ApiToken
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      */
-    private function refreshToken(Entity $apiToken, \DateTime $currentDate): Entity
+    public function refreshToken(Entity $apiToken, \DateTime $currentDate): Entity
     {
         $newToken = $this->generateTokenHash($currentDate);
         $apiToken->setToken($newToken);
@@ -67,7 +67,7 @@ class ApiToken
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      */
-    private function generateToken(User $user): Entity
+    public function generateToken(User $user): Entity
     {
         $token = new Entity();
         $date = new \DateTime();
