@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Asset;
 use App\Entity\User;
 use App\Service\Asset as AssetService;
+use App\Service\Currency;
 use Symfony\Component\HttpFoundation\Request;
 use  Symfony\Component\HttpFoundation\Response;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -117,5 +118,32 @@ class AssetController extends AbstractController
         }
 
         return $this->json(null);
+    }
+    /**
+     * @Route("/balance", name="asset.balance", methods={"GET"})
+     */
+    public function balance(Request $request, Currency $currencyService)
+    {
+        /** @var User $user */
+        $user = $this->getUser();
+        $assets = $user->getAssets();
+
+        $response = [];
+        $totalValue = 0;
+        /** @var Asset $asset */
+        foreach ($assets as $asset) {
+            $currency = $asset->getCurrency();
+            $usdValue = $currencyService->getValueInUsd($currency, $asset->getAmount());
+            $totalValue += $usdValue;
+            $response[$asset->getId()] = [
+                'label' => $asset->getLabel(),
+                'amount' => $asset->getAmount(),
+                'currency' => $currency->getSlug(),
+                'USD_value' => $usdValue
+            ];
+        }
+        $response['total_value'] = round($totalValue, 2, PHP_ROUND_HALF_UP);
+
+        return $this->json($response);
     }
 }
